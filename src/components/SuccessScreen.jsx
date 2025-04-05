@@ -1,10 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
 const SuccessScreen = ({ pdfUrl }) => {
+  const [isDownloadReady, setIsDownloadReady] = useState(false);
+  
+  // Check if PDF is ready when component mounts or pdfUrl changes
+  useEffect(() => {
+    // If pdfUrl exists, mark as ready for download
+    if (pdfUrl) {
+      console.log('PDF URL is available:', pdfUrl);
+      setIsDownloadReady(true);
+    } else {
+      console.log('PDF URL is not available');
+      setIsDownloadReady(false);
+    }
+  }, [pdfUrl]);
+
+  const handleDownload = () => {
+    if (!pdfUrl) return;
+    
+    try {
+      // Create a download link and click it
+      const a = document.createElement('a');
+      a.href = pdfUrl;
+      a.download = "Cronograma_de_Estudos_DevClub.pdf";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      
+      console.log('PDF download initiated');
+    } catch (error) {
+      console.error('Error initiating download:', error);
+      // If there's an error with the download link, open in a new tab as fallback
+      window.open(pdfUrl, '_blank');
+    }
+  };
+
   return (
     <motion.div
-      className="bg-white dark:bg-secondary rounded-2xl shadow-xl p-8"
+      className="bg-white dark:bg-secondary rounded-2xl shadow-xl p-8 w-full"
       initial={{ y: 20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -54,22 +88,32 @@ const SuccessScreen = ({ pdfUrl }) => {
           </div>
           <div>
             <h3 className="font-medium text-secondary dark:text-white">Seu Cronograma de Estudos</h3>
-            <p className="text-sm text-text-muted-light dark:text-text-muted-dark">Clique no botão abaixo para baixar o PDF</p>
+            <p className="text-sm text-text-muted-light dark:text-text-muted-dark">
+              {isDownloadReady 
+                ? "Clique no botão abaixo para baixar o PDF" 
+                : "Preparando seu arquivo para download..."}
+            </p>
           </div>
         </div>
         
-        <motion.a
-          href={pdfUrl}
-          download="Cronograma_de_Estudos_DevClub.pdf"
-          className="w-full py-3 px-6 bg-primary hover:bg-primary-dark text-white font-bold rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-neon flex items-center justify-center"
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
-          </svg>
-          Baixar Cronograma
-        </motion.a>
+        {isDownloadReady ? (
+          <motion.button
+            onClick={handleDownload}
+            className="w-full py-3 px-6 bg-primary hover:bg-primary-dark text-white font-bold rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-neon flex items-center justify-center"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+            </svg>
+            Baixar Cronograma
+          </motion.button>
+        ) : (
+          <div className="w-full py-3 flex items-center justify-center">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+            <span className="ml-3 text-text-muted-light dark:text-text-muted-dark">Preparando download...</span>
+          </div>
+        )}
       </motion.div>
       
       <motion.div

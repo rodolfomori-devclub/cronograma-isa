@@ -5,7 +5,7 @@ import Isa from '../assets/isa.png'
 const WelcomePopup = ({ startApp }) => {
   return (
     <motion.div 
-      className="bg-white dark:bg-secondary rounded-2xl shadow-xl w-full max-w-xl p-8 flex flex-col items-center text-center"
+      className="bg-white dark:bg-secondary rounded-2xl shadow-xl w-full max-w-xl p-8 flex flex-col items-center text-center mx-auto"
       initial={{ scale: 0.9, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
