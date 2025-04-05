@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 const ObjectiveForm = ({ formData, updateFormData, nextStep, prevStep }) => {
   const objectives = [
     {
-      id: 'Emprego',
+      id: 'default',
       title: 'Conseguir um emprego',
       description: 'Cronograma focado em habilidades valorizadas no mercado de trabalho',
       icon: (
@@ -14,7 +14,7 @@ const ObjectiveForm = ({ formData, updateFormData, nextStep, prevStep }) => {
       )
     },
     {
-      id: 'Dinheiro',
+      id: 'quick_cash',
       title: 'Fazer dinheiro rápido',
       description: 'Foco em habilidades para trabalhos freelancer e projetos de curto prazo',
       icon: (
@@ -26,7 +26,11 @@ const ObjectiveForm = ({ formData, updateFormData, nextStep, prevStep }) => {
   ];
 
   const handleObjectiveSelect = (objective) => {
-    updateFormData({ objective: objective });
+    // Only update the program_format field
+    // The objective field will be used for the PDF name and set right before submission
+    updateFormData({ 
+      program_format: objective
+    });
     nextStep();
   };
 
@@ -52,13 +56,6 @@ const ObjectiveForm = ({ formData, updateFormData, nextStep, prevStep }) => {
     }
   };
 
-  // Function to map objectives to API values
-  const getApiObjective = (objective) => {
-    if (objective === 'Emprego') return 'Emprego';
-    if (objective === 'Dinheiro') return 'Dinheiro';
-    return 'Emprego'; // Default
-  };
-
   return (
     <motion.div
       className="bg-white dark:bg-secondary rounded-2xl shadow-xl p-8"
@@ -80,19 +77,19 @@ const ObjectiveForm = ({ formData, updateFormData, nextStep, prevStep }) => {
             key={objective.id}
             variants={cardVariants}
             initial="unselected"
-            animate={formData.objective === getApiObjective(objective.id) ? "selected" : "unselected"}
+            animate={formData.program_format === objective.id ? "selected" : "unselected"}
             whileHover="hover"
             whileTap="tap"
-            onClick={() => handleObjectiveSelect(getApiObjective(objective.id))}
+            onClick={() => handleObjectiveSelect(objective.id)}
             className={`p-6 rounded-xl cursor-pointer transition-all border-2 ${
-              formData.objective === getApiObjective(objective.id)
+              formData.program_format === objective.id 
                 ? 'border-primary bg-primary bg-opacity-5' 
                 : 'border-gray-200 dark:border-secondary-light'
             }`}
           >
             <div className="flex items-center">
               <div className={`flex-shrink-0 p-3 rounded-lg mr-4 ${
-                formData.objective === getApiObjective(objective.id)
+                formData.program_format === objective.id
                   ? 'text-primary'
                   : 'text-gray-500 dark:text-gray-400'
               }`}>
@@ -100,7 +97,7 @@ const ObjectiveForm = ({ formData, updateFormData, nextStep, prevStep }) => {
               </div>
               <div>
                 <h3 className={`text-lg font-medium ${
-                  formData.objective === getApiObjective(objective.id)
+                  formData.program_format === objective.id
                     ? 'text-primary'
                     : 'text-secondary dark:text-white'
                 }`}>
@@ -111,7 +108,7 @@ const ObjectiveForm = ({ formData, updateFormData, nextStep, prevStep }) => {
                 </p>
               </div>
               <div className="ml-auto">
-                {formData.objective === getApiObjective(objective.id) && (
+                {formData.program_format === objective.id && (
                   <motion.div
                     initial={{ scale: 0, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}

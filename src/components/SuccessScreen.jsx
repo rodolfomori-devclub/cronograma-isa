@@ -53,8 +53,8 @@ const SuccessScreen = ({ pdfUrl }) => {
             </svg>
           </div>
           <div>
-            <h3 className="font-medium text-secondary dark:text-white">Cronograma de Estudos.pdf</h3>
-            <p className="text-sm text-text-muted-light dark:text-text-muted-dark">Clique no botão abaixo para baixar</p>
+            <h3 className="font-medium text-secondary dark:text-white">Seu Cronograma de Estudos</h3>
+            <p className="text-sm text-text-muted-light dark:text-text-muted-dark">Clique no botão abaixo para baixar o PDF</p>
           </div>
         </div>
         

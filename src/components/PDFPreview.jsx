@@ -22,7 +22,7 @@ const PDFPreview = ({ pdfUrl }) => {
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
           </svg>
-          <span className="font-medium text-secondary dark:text-white">Cronograma_de_Estudos_DevClub.pdf</span>
+          <span className="font-medium text-secondary dark:text-white">Cronograma de Estudos DevClub</span>
         </div>
         
         <div className="flex gap-2">
@@ -60,7 +60,7 @@ const PDFPreview = ({ pdfUrl }) => {
       <div className={`relative ${isExpanded ? 'h-full' : 'h-96'}`}>
         {pdfUrl ? (
           <iframe 
-            src={`${pdfUrl}#toolbar=0&navpanes=0`} 
+            src={`${pdfUrl}#toolbar=1&navpanes=1`} 
             className="w-full h-full border-none"
             title="PDF Preview"
           />

@@ -23,12 +23,12 @@ function App() {
   const [showLandingPage, setShowLandingPage] = useState(true);
   const [formData, setFormData] = useState({
     name: '',
-    phone: '',
+    phone: '', // Mantido para o formulário, mas não será enviado para a API
     daily_hours: 3.5,
     weekly_days: 5,
     knowledge_level: 'Iniciante',
     program_format: 'default',
-    objective: 'Emprego'
+    objective: 'Emprego' // Este campo será usado como nome do PDF
   });
 
   // Helper to update form data
@@ -44,6 +44,16 @@ function App() {
     setIsLoading(true);
     setError(null);
     
+    // Prepare data to submit - use objective field for PDF name and exclude phone field
+    const dataToSubmit = {
+      name: formData.name,
+      daily_hours: formData.daily_hours,
+      weekly_days: formData.weekly_days,
+      knowledge_level: formData.knowledge_level,
+      program_format: formData.program_format,
+      objective: `Cronograma de Estudo - ${formData.name}` // Nome do PDF no campo objective
+    };
+    
     try {
       const response = await fetch('https://isaapi.devclub.com.br/d718f39b-eee5-4249-ac4a-72af52b0135d/public/create-study-program', {
         method: 'POST',
@@ -52,7 +62,7 @@ function App() {
           'x-function-token': '844273cb8328b7a2ef14244664ed490ee37f679d197923738cf0b75a9d3221fa',
           'x-platform-request-id': '123456789'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(dataToSubmit)
       });
       
       if (!response.ok) {

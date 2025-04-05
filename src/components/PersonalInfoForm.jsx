@@ -19,7 +19,10 @@ const PersonalInfoForm = ({ formData, updateFormData, nextStep }) => {
     if (!formData.phone.trim()) {
       newErrors.phone = 'Telefone é obrigatório';
     } else if (!/^\d{10,15}$/.test(formData.phone.replace(/\D/g, ''))) {
-      newErrors.phone = 'Telefone inválido. Use o formato: 552199999999';
+      newErrors.phone = 'Telefone inválido. Use o formato: +55 (21) 99999-9999';
+    } else if (!formData.phone.startsWith('55')) {
+      // Ensure the country code is included
+      updateFormData({ phone: ensureCountryCode(formData.phone) });
     }
     
     setErrors(newErrors);
@@ -52,9 +55,19 @@ const PersonalInfoForm = ({ formData, updateFormData, nextStep }) => {
     }
   };
   
+  // Ensure the phone number starts with +55 if not provided
+  const ensureCountryCode = (phone) => {
+    const digits = phone.replace(/\D/g, '');
+    if (digits.startsWith('55')) {
+      return digits;
+    } else {
+      return `55${digits}`;
+    }
+  };
+  
   const handlePhoneChange = (e) => {
     const formattedValue = formatPhoneNumber(e.target.value);
-    const rawValue = formattedValue.replace(/\D/g, '');
+    const rawValue = ensureCountryCode(formattedValue);
     updateFormData({ phone: rawValue });
   };
   
